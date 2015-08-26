@@ -1,4 +1,4 @@
-# Run with `awk games.csv -F, -f analyze.awk`
+# Run with `awk games.csv -F, -f analyze.awk` | sort -n
 #
 # games.csv was scraped with this javascript snippet:
 # var e = document.querySelectorAll('.new-score-box'); function z(k) {return k.querySelector('a').href.slice(38) + "," + k.querySelector(".total-score").text(); } for(var i = 0; i < e.length; i++) { console.log(z(e[i].querySelector('.team-wrapper:nth-child(2)')) + "," + z(e[i].querySelector('.team-wrapper:nth-child(1)'))); }
@@ -113,11 +113,11 @@ END {
 	}
 
 	if(state == "calculate") {
-		print "Total / TEAM / Exp Score / Actual Score / Diff / Exp Allowed / Actual Allowed / Diff"
+		print "Total,TEAM,Exp Score,Actual Score,Diff,Exp Allowed,Actual Allowed,Diff" | "cat >&2"
 		for(i in opExpPointsAllowed) {
 			offDiff = (opActPointsScored[i] - opExpPointsScored[i])
 			defDiff = (opExpPointsAllowed[i] - opActPointsAllowed[i])
-			print (offDiff + defDiff) " / " i " / " opExpPointsScored[i] " / " opActPointsScored[i] " / " offDiff  " / " opExpPointsAllowed[i] " / " opActPointsAllowed[i] " / " defDiff
+			print (offDiff + defDiff) "," i "," opExpPointsScored[i] "," opActPointsScored[i] "," offDiff  "," opExpPointsAllowed[i] "," opActPointsAllowed[i] "," defDiff
 		}
 	}
 }
